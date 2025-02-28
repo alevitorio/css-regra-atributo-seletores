@@ -13,6 +13,48 @@ O termo "cascata" no CSS refere-se à forma como os estilos são aplicados e res
 
 ---
 
+## 🎯 Especificidade e Conflitos de Estilo
+Quando múltiplas regras competem entre si, o CSS segue uma hierarquia baseada na **especificidade**. O modelo de especificidade é representado como uma **tríade de valores (a, b, c)**, onde:
+
+- **a (ID selectors)** → Contagem de seletores `id`
+- **b (Class, Attribute, Pseudo-class selectors)** → Contagem de classes, atributos e pseudo-classes
+- **c (Type selectors and Pseudo-elements)** → Contagem de seletores de tag e pseudo-elementos
+
+### Exemplo prático de especificidade
+Vamos considerar o seguinte código:
+
+```html
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <style>
+        /* Especificidade: (0,0,1) */
+        h1 { color: blue; }
+        
+        /* Especificidade: (0,1,0) */
+        .titulo { color: green; }
+        
+        /* Especificidade: (1,0,0) */
+        #principal { color: red; }
+    </style>
+</head>
+<body>
+    <h1 id="principal" class="titulo" style="color: purple;">Texto de exemplo</h1>
+</body>
+</html>
+```
+
+### Como o CSS decide a cor final do `<h1>`?
+1. **`h1 { color: blue; }`** → Especificidade **(0,0,1)**
+2. **`.titulo { color: green; }`** → Especificidade **(0,1,0)** (prioridade maior que a anterior)
+3. **`#principal { color: red; }`** → Especificidade **(1,0,0)** (prioridade ainda maior)
+4. **`style="color: purple;"`** → Especificidade **(1,0,0,0)** (inline sempre vence qualquer regra externa, a menos que haja `!important`)
+
+### Resultado final
+O `h1` terá a cor **purple** porque o estilo inline tem a maior prioridade.
+
+---
+
 ## 🎯 Regras CSS
 Uma regra CSS é composta por **seletor + propriedades + valores**:
 ```css
@@ -29,63 +71,29 @@ h1 {
 ```
 Aqui, todos os `<h1>` da página terão a cor azul e tamanho de fonte 24px.
 
----
+### Exemplo prático de aplicação de estilos
+CSS pode ser aplicado de três formas:
+1. **Inline** (`style=""` dentro do HTML)
+   ```html
+   <h1 style="color: red;">Título em vermelho</h1>
+   ```
+   - **Especificidade: (1,0,0,0)** (prioridade máxima)
 
-## 🎯 Seletores CSS
-Os seletores definem quais elementos HTML serão estilizados. Os principais tipos são:
+2. **Interno** (`<style>` dentro do `<head>`)
+   ```html
+   <head>
+       <style>
+           h1 { color: blue; }
+       </style>
+   </head>
+   ```
+   - **Especificidade: (0,0,1)**
 
-### 🔹 1. Seletores Simples
-- **Por Tag:** Aplica a regra a todas as tags do tipo indicado.
-  ```css
-  p { color: red; }
-  ```
-- **Por Classe:** Define estilos para qualquer elemento com a classe especificada.
-  ```css
-  .destaque { font-weight: bold; }
-  ```
-- **Por ID:** Aplica o estilo apenas ao elemento com aquele ID.
-  ```css
-  #titulo { font-size: 32px; }
-  ```
-
-### 🔹 2. Seletores Combinadores
-- **Descendente:** Seleciona elementos dentro de outros.
-  ```css
-  div p { color: green; }
-  ```
-- **Filho Direto:** Seleciona apenas os filhos diretos.
-  ```css
-  div > p { margin-left: 10px; }
-  ```
-- **Irmão Adjacente:** Seleciona o primeiro irmão imediato.
-  ```css
-  h1 + p { font-style: italic; }
-  ```
-
-### 🔹 3. Seletores Avançados
-- **Pseudo-classes:** Aplicam estilos em estados específicos.
-  ```css
-  a:hover { color: red; }
-  ```
-- **Pseudo-elementos:** Estilizam partes específicas de um elemento.
-  ```css
-  p::first-letter { font-size: 2em; }
-  ```
-
----
-
-## 🎨 Especificidade e Conflitos de Estilo
-Quando múltiplas regras competem entre si, o CSS segue uma hierarquia:
-1. **Inline (mais forte)** → `style="color: red;"`
-2. **ID** (`#meuId`) → Mais forte que classes e tags.
-3. **Classe/Pseudo-classe/Atributos** (`.minhaClasse`, `:hover`, `[type="text"]`)
-4. **Tag** (`h1`, `p`, `div`)
-5. **Herança (menos forte)** → Propriedades herdadas do pai.
-
-> ⚠ **Dica:** Para forçar um estilo, use `!important`, mas evite abusar dessa prática.
-```css
-p { color: blue !important; }
-```
+3. **Externo** (Arquivo `.css` separado)
+   ```css
+   h1 { color: green; }
+   ```
+   - **Especificidade: (0,0,1)** (mesmo peso do interno, mas pode ser sobrescrito pela ordem de carregamento)
 
 ---
 
@@ -159,4 +167,3 @@ CSS é uma ferramenta poderosa para estilizar páginas web, e compreender o mode
 ---
 
 ✍ **Criado por [Alessandro]** 🚀
-
