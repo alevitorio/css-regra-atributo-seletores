@@ -27,6 +27,7 @@ Vamos considerar o seguinte código:
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
+    <link rel="stylesheet" href="styles.css"> <!-- Arquivo CSS externo -->
     <style>
         /* Especificidade: (0,0,1) */
         h1 { color: blue; }
@@ -89,7 +90,12 @@ CSS pode ser aplicado de três formas:
    ```
    - **Especificidade: (0,0,1)**
 
-3. **Externo** (Arquivo `.css` separado)
+3. **Externo** (Arquivo `.css` separado e referenciado no `<head>`) 
+   ```html
+   <head>
+       <link rel="stylesheet" href="styles.css">
+   </head>
+   ```
    ```css
    h1 { color: green; }
    ```
